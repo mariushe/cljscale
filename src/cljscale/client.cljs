@@ -1,7 +1,7 @@
 (ns cljscale.client
   (:require [quiescent.core :as q]
             [quiescent.dom :as d]
-            [cljscale.theory :as t]))
+            [cljscale.generator :as g]))
 
 (enable-console-print!)
 
@@ -15,7 +15,6 @@
             (.getElementById js/document "main")))
 
 (q/defcomponent Fret [fret]
-  (println (t/test))
   (apply d/div {:className "fret"} (:note fret)))
 
 (q/defcomponent String [frets]
@@ -24,4 +23,8 @@
 (q/defcomponent FretBoard [fretboard]
   (apply d/div {:className "fretboard"} (mapv String fretboard)))
 
-(render)
+(defn start []
+  (swap! fretboard (fn [_] (g/create-fretboard g/e-standard 12)))
+  (render))
+
+(start)
