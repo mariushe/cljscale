@@ -5,8 +5,7 @@
 
 (enable-console-print!)
 
-(def fretboard (atom [[{:note "E"}{:note "F"}{:note "F#"}{:note "G"}{:note "G#"}]
-                      [{:note "E"}{:note "F"}{:note "F#"}{:note "G"}{:note "G#"}]]))
+(def fretboard (atom []))
 
 (declare FretBoard)
 
@@ -25,6 +24,7 @@
 
 (defn start []
   (swap! fretboard (fn [_] (g/create-fretboard g/e-standard 12)))
+  (println fretboard)
   (render))
 
 (start)

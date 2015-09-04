@@ -7,6 +7,19 @@
 
 (def e-standard ["E" "B" "G" "D" "A" "E"])
 
+(def scales {"pentatonic-minor" (3)})
+
+
+(defn find-note [note rest]
+  (if (= rest 0)
+    note
+    (recur (note-map note) (dec rest))))
+
+
+
+(defn find-scale [scale root]
+  (find-note "E" 3))
+
 (defn create-note [note] {:note note})
 
 (defn generate-frets [res note frets-left]
