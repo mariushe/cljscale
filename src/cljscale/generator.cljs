@@ -7,7 +7,8 @@
 
 (def e-standard ["E" "B" "G" "D" "A" "E"])
 
-(def scales {"pentatonic-minor" '(0 3 5 7 10)})
+(def scales {"pentatonic-minor" '(0 3 5 7 10)
+             "phrygian" '(0 1 3 5 7 8 10)})
 
 
 (defn find-note [note rest]

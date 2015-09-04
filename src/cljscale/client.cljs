@@ -30,7 +30,7 @@
 
 (defn start []
   (swap! fretboard (fn [_] (g/create-fretboard g/e-standard 12)))
-  (swap! fretboard (fn [_] (g/add-scale @fretboard "pentatonic-minor" "E")))
+  (swap! fretboard (fn [_] (g/add-scale @fretboard "phrygian" "E")))
   (println fretboard)
   (render))
 
