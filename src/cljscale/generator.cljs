@@ -1,13 +1,13 @@
 (ns cljscale.generator)
 
 (def note-map {"E" "F" "F" "F#" "F#" "G"
-               "G" "G#" "G#" "A" "A" "Bb"
-               "Bb" "B" "B" "C" "C" "C#"
+               "G" "G#" "G#" "A" "A" "A#"
+               "A#" "B" "B" "C" "C" "C#"
                "C#" "D" "D" "D#" "D#" "E"})
 
 (def e-standard ["E" "B" "G" "D" "A" "E"])
 
-(def scales {"pentatonic-minor" (3)})
+(def scales {"pentatonic-minor" '(0 3 5 7 10)})
 
 
 (defn find-note [note rest]
@@ -15,10 +15,26 @@
     note
     (recur (note-map note) (dec rest))))
 
-
+(defn create-scale-generator [root]
+  (fn [steps] (find-note root steps)))
 
 (defn find-scale [scale root]
-  (find-note "E" 3))
+  (map (create-scale-generator root) (scales scale)))
+
+(defn add-scale-to-string [string scale]
+  (mapv (fn [note]
+          (-> note
+              (assoc :in-scale (not (not-any? #(= (note :note) %) scale)))
+              (assoc :root  (= (note :note) (first scale)))))
+        string))
+
+(defn add-scale [fretboard scale root]
+  (mapv (fn [string]
+          (add-scale-to-string
+           string
+           (find-scale scale root)))
+        fretboard))
+
 
 (defn create-note [note] {:note note})
 

@@ -14,7 +14,13 @@
             (.getElementById js/document "main")))
 
 (q/defcomponent Fret [fret]
-  (apply d/div {:className "fret"} (:note fret)))
+  (apply
+   d/div
+   {:className (str
+                (when (:root fret) "root ")
+                (if (:in-scale fret) "in-scale " "not-in-scale ")
+                "fret")}
+   (:note fret)))
 
 (q/defcomponent String [frets]
   (apply d/div {:className "string"} (mapv Fret frets)))
@@ -24,6 +30,7 @@
 
 (defn start []
   (swap! fretboard (fn [_] (g/create-fretboard g/e-standard 12)))
+  (swap! fretboard (fn [_] (g/add-scale @fretboard "pentatonic-minor" "E")))
   (println fretboard)
   (render))
 
