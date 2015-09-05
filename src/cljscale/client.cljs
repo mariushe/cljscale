@@ -31,20 +31,31 @@
   (println @fretboard)
   (render))
 
+(q/defcomponent RoundSpan []
+  (apply d/span {:className "round-span"} ""))
+
+(q/defcomponent NoteSpan [note]
+  (apply d/span {:className "note"} (:note note)))
+
 (q/defcomponent Fret [fret]
   (apply
-   d/div
+   d/li
    {:className (str
                 (when (:root fret) "root ")
                 (if (:in-scale fret) "in-scale " "not-in-scale ")
                 "fret")}
-   (:note fret)))
+   ;;(when (:root fret) (RoundSpan))
+   ;;(NoteSpan fret)
+   (:note fret)
+   ;;""
+   ))
 
 (q/defcomponent String [frets]
-  (apply d/div {:className "string"} (mapv Fret frets)))
+  (apply d/ul {:className "string"} (mapv Fret frets)))
 
 (q/defcomponent FretBoard [fretboard]
-  (apply d/div {:className "fretboard"} (mapv String fretboard)))
+  (d/div {:className "row"}
+         (apply d/div {:className "fretboard col-sm-10 col-sm-offset-1"} (mapv String fretboard))))
 
 (q/defcomponent Option [root]
   (d/option {:value root} root))
