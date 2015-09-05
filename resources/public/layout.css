@@ -1,9 +1,21 @@
 
+.main {
+    padding-top: 50px;
+}
+
+.fretboard {
+    padding-bottom: 50px;
+}
+
 .fret {
     display:inline-block;
     border-left: 1px solid #999;
     padding-left: 10px;
     width: 40px;
+}
+
+.selections {
+    text-align: center;
 }
 
 .round-span {

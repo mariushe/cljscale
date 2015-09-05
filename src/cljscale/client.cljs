@@ -62,7 +62,7 @@
 
 (q/defcomponent Root []
   (apply d/select
-         {:className "testing"
+         {:className "root-selection"
           :onChange (fn [root]
                       (println "TEst")
                       (swap! settings assoc :root (.-value (.-target root)))
@@ -71,16 +71,21 @@
 
 (q/defcomponent Scale []
   (apply d/select
-         {:className "testing"
+         {:className "scale-selection"
           :onChange (fn [root]
                       (println "TEst2")
                       (swap! settings assoc :scale (.-value (.-target root)))
                       (load))}
          (map Option (keys g/scales))))
 
+(q/defcomponent Selections []
+  (d/div
+   {:className "selections row"}
+   (Root)
+   (Scale)))
+
 (q/defcomponent View [fretboard] (d/div {}
                                         (FretBoard fretboard)
-                                        (Root)
-                                        (Scale)))
+                                        (Selections)))
 
 (load)
