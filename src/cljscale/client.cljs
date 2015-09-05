@@ -7,11 +7,29 @@
 
 (def fretboard (atom []))
 
+(def settings (atom {:root ""
+                     :scale ""}))
+
 (declare FretBoard)
 
+(declare View)
+
 (defn render []
-  (q/render (FretBoard @fretboard)
-            (.getElementById js/document "main")))
+  (q/render
+   (View @fretboard)
+   (.getElementById js/document "main")))
+
+(defn load []
+  (swap! fretboard (fn [_] (g/create-fretboard g/e-standard 24)))
+  (when (not (= (:root @settings) ""))
+    (swap! fretboard (fn [_] (g/add-root @fretboard (:root @settings)))))
+  (when (not (= (:scale @settings) ""))
+    (swap! fretboard (fn [_] (g/add-scale
+                              @fretboard
+                              (:scale @settings)
+                              (:root @settings)))))
+  (println @fretboard)
+  (render))
 
 (q/defcomponent Fret [fret]
   (apply
@@ -28,10 +46,30 @@
 (q/defcomponent FretBoard [fretboard]
   (apply d/div {:className "fretboard"} (mapv String fretboard)))
 
-(defn start []
-  (swap! fretboard (fn [_] (g/create-fretboard g/e-standard 12)))
-  (swap! fretboard (fn [_] (g/add-scale @fretboard "phrygian" "E")))
-  (println fretboard)
-  (render))
+(q/defcomponent Option [root]
+  (d/option {:value root} root))
 
-(start)
+(q/defcomponent Root []
+  (apply d/select
+         {:className "testing"
+          :onChange (fn [root]
+                      (println "TEst")
+                      (swap! settings assoc :root (.-value (.-target root)))
+                      (load))}
+         (map Option (conj g/notes ""))))
+
+(q/defcomponent Scale []
+  (apply d/select
+         {:className "testing"
+          :onChange (fn [root]
+                      (println "TEst2")
+                      (swap! settings assoc :scale (.-value (.-target root)))
+                      (load))}
+         (map Option (keys g/scales))))
+
+(q/defcomponent View [fretboard] (d/div {}
+                                        (FretBoard fretboard)
+                                        (Root)
+                                        (Scale)))
+
+(load)

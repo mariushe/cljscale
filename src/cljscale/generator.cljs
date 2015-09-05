@@ -5,9 +5,12 @@
                "A#" "B" "B" "C" "C" "C#"
                "C#" "D" "D" "D#" "D#" "E"})
 
+(def notes ["E" "F" "F#" "G" "G#"])
+
 (def e-standard ["E" "B" "G" "D" "A" "E"])
 
-(def scales {"pentatonic-minor" '(0 3 5 7 10)
+(def scales {"" '(0 1 2 3 4 5 6 7 8 9 10 11)
+             "pentatonic-minor" '(0 3 5 7 10)
              "phrygian" '(0 1 3 5 7 8 10)})
 
 
@@ -24,9 +27,9 @@
 
 (defn add-scale-to-string [string scale]
   (mapv (fn [note]
+          (println scale)
           (-> note
-              (assoc :in-scale (not (not-any? #(= (note :note) %) scale)))
-              (assoc :root  (= (note :note) (first scale)))))
+              (assoc :in-scale (not (not-any? #(= (note :note) %) scale)))))
         string))
 
 (defn add-scale [fretboard scale root]
@@ -36,6 +39,13 @@
            (find-scale scale root)))
         fretboard))
 
+(defn mark-if-root [note root]
+  (assoc note :root  (= (note :note) root)))
+
+(defn add-root [fretboard root]
+  (mapv (fn [string]
+          (mapv (fn [note] (mark-if-root note root)) string))
+        fretboard))
 
 (defn create-note [note] {:note note})
 
