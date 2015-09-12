@@ -20,7 +20,7 @@
    (.getElementById js/document "main")))
 
 (defn load []
-  (swap! fretboard (fn [_] (g/create-fretboard g/e-standard 12)))
+  (swap! fretboard (fn [_] (g/create-fretboard g/e-standard 24)))
   (when (not (= (:root @settings) ""))
     (swap! fretboard (fn [_] (g/add-root @fretboard (:root @settings)))))
   (when (not (= (:scale @settings) ""))
@@ -31,8 +31,8 @@
   (println @fretboard)
   (render))
 
-(q/defcomponent RoundSpan []
-  (apply d/span {:className "round-span"} ""))
+(q/defcomponent RoundSpan [add-classes]
+  (apply d/span {:className (str "round-span " add-classes)} ""))
 
 (q/defcomponent NoteSpan [note]
   (apply d/span {:className "note"} (:note note)))
@@ -43,8 +43,12 @@
    {:className (str
                 (when (:root fret) "root ")
                 (if (:in-scale fret) "in-scale " "not-in-scale ")
-                "fret")}
-   ;;(when (:root fret) (RoundSpan))
+                "fret")
+    :onClick (fn [root]
+               (swap! settings assoc :root (:note fret))
+               (load))}
+   (when (:in-scale fret) (RoundSpan "round-scale"))
+   (when (:root fret) (RoundSpan "round-root"))
    ;;(NoteSpan fret)
    (:note fret)
    ;;""
@@ -55,7 +59,7 @@
 
 (q/defcomponent FretBoard [fretboard]
   (d/div {:className "row"}
-         (apply d/div {:className "fretboard col-sm-10 col-sm-offset-1"} (mapv String fretboard))))
+         (apply d/div {:className "fretboard col-sm-12"} (mapv String fretboard))))
 
 (q/defcomponent Option [root]
   (d/option {:value root} root))

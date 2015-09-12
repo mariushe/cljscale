@@ -9,13 +9,20 @@
 
 .fretboard {
     padding-bottom: 50px;
+    overflow-x:scroll;
+    overflow-y:hidden;
+    height:200px;
+    white-space: nowrap;
+    position: relative;
 }
 
 .fret {
     display:inline-block;
     border-left: 1px solid #999;
     padding-left: 10px;
+    height: 30px;
     width: 40px;
+    position: relative;
 }
 
 .selections {
@@ -27,14 +34,21 @@
     color: #000;
     z-index: -1;
     border-radius: 50%;
-    padding-left: -10px;
     behavior: url(PIE.htc); /* remove if you don't care about IE8 */
 
-    width: 25px;
-    height: 25px;
-    
-    background: #999;
-    color: #666;
+    width: 23px;
+    height: 23px;
+
+    top: -2px;
+    left: 4px;
+}
+
+.round-root {
+    background: #4A95C4;
+}
+
+.round-scale {
+    background: #757574;
 }
 
 .note {
@@ -55,5 +69,6 @@
 }
 
 .root {
-    color: #4A95C4;
+    color: #FFF;
+    opacity: 0.7;
 }
