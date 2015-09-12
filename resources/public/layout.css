@@ -3,6 +3,10 @@
     padding-top: 50px;
 }
 
+.body {
+    background: #3C3D3D;
+}
+
 .fretboard {
     padding-bottom: 50px;
 }
@@ -42,13 +46,14 @@
 }
 
 .not-in-scale {
-    color: #CCCCCC;
+    color: #757574;
 }
 
 .in-scale {
-    color: #000;
+    color: #FFF;
+    opacity: 0.7;
 }
 
 .root {
-    color: #0000FF;
+    color: #4A95C4;
 }
