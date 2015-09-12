@@ -20,7 +20,7 @@
    (.getElementById js/document "main")))
 
 (defn load []
-  (swap! fretboard (fn [_] (g/create-fretboard g/e-standard 24)))
+  (swap! fretboard (fn [_] (g/create-fretboard g/e-standard 12)))
   (when (not (= (:root @settings) ""))
     (swap! fretboard (fn [_] (g/add-root @fretboard (:root @settings)))))
   (when (not (= (:scale @settings) ""))
@@ -64,7 +64,6 @@
   (apply d/select
          {:className "root-selection"
           :onChange (fn [root]
-                      (println "TEst")
                       (swap! settings assoc :root (.-value (.-target root)))
                       (load))}
          (map Option (conj g/notes ""))))
@@ -73,7 +72,6 @@
   (apply d/select
          {:className "scale-selection"
           :onChange (fn [root]
-                      (println "TEst2")
                       (swap! settings assoc :scale (.-value (.-target root)))
                       (load))}
          (map Option (keys g/scales))))

@@ -14,6 +14,9 @@
              "phrygian" '(0 1 3 5 7 8 10)})
 
 
+(defn foreach-fret [f fretboard]
+  (mapv (fn [string] (mapv f string)) fretboard))
+
 (defn find-note [note rest]
   (if (= rest 0)
     note
@@ -25,27 +28,18 @@
 (defn find-scale [scale root]
   (map (create-scale-generator root) (scales scale)))
 
-(defn add-scale-to-string [string scale]
-  (mapv (fn [note]
-          (println scale)
-          (-> note
-              (assoc :in-scale (not (not-any? #(= (note :note) %) scale)))))
-        string))
+(defn mark-if-in-scale [note scale]
+  (assoc note :in-scale (not (not-any? #(= (note :note) %) scale))))
 
-(defn add-scale [fretboard scale root]
-  (mapv (fn [string]
-          (add-scale-to-string
-           string
-           (find-scale scale root)))
-        fretboard))
+(defn add-scale [fretboard scale-name root]
+  (let [scale (find-scale scale-name root)]
+    (foreach-fret (fn [note] (mark-if-in-scale note scale)) fretboard)))
 
 (defn mark-if-root [note root]
   (assoc note :root  (= (note :note) root)))
 
 (defn add-root [fretboard root]
-  (mapv (fn [string]
-          (mapv (fn [note] (mark-if-root note root)) string))
-        fretboard))
+  (foreach-fret (fn [note] (mark-if-root note root)) fretboard))
 
 (defn create-note [note] {:note note})
 
